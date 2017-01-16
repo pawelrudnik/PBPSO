@@ -31,8 +31,8 @@ bool binary(double x) {
 double fitness(bool x[])
 {
 	double result = 0;
-	for (int n = 0; n < D; n++) {
-		result += (double)profit[n] * x[n];
+	for (int j = 0; j < D; j++) {
+		result += (double)profit[j] * x[j];
 	}
 	return result;
 }
@@ -59,20 +59,21 @@ int main()
 	// Algorytm
 	for (int k = 0; k < iterations; k++) {
 		for (int i = 0; i < pop_size; i++) {
+
 			for (int j = 0; j < D; j++)
 			{
 				v[i][j] = velocity(v[i][j], x[i][j], p_local[i][j], p_global[j]);
 				x[i][j] = x[i][j] + v[i][j];
 				px[i][j] = binary(x[i][j]);
-
-				//if (fitness(px[i]) > fitness(p_local[i])) {
-				//	p_local[i] = x[i];
-
-				//	if (fitness(px[i]) > fitness(p_global)) {
-				//		p_global = x[i];
-				//	}
-				//}
 			}
+
+			//if (fitness(px[i]) > fitness(p_local[i])) {
+			//	p_local[i] = x[i];
+
+			//	if (fitness(px[i]) > fitness(p_global)) {
+			//		p_global = x[i];
+			//	}
+			//}
 		}
 	}
 
