@@ -1,3 +1,3 @@
 #pragma once
 
-double randomNumber(double lower_bound, double upper_bound);
+double randomDouble(double lower_bound, double upper_bound);

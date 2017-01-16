@@ -8,7 +8,7 @@ using namespace std;
 
 const int pop_size = 10;
 const int D = 2;
-const int iterations = 100;
+const int iterations = 10;
 const int R_min = -1;
 const int R_max = 1;
 const double omega = 0.8;
@@ -17,7 +17,9 @@ const double c2 = 2.0;
 const int profit[D] = { 4, 5 };
 
 double velocity(double v_k, double x, double p_local, double p_global) {
-	return omega * v_k + c1 * (p_local - x) + c2 * (p_global - x);
+	double r1 = randomDouble(0.0, 1.0);
+	double r2 = randomDouble(0.0, 1.0);
+	return omega * v_k + c1 * r1 * (p_local - x) + c2 * r2 * (p_global - x);
 }
 
 double L(double x) {
@@ -25,7 +27,7 @@ double L(double x) {
 }
 
 bool binary(double x) {
-	return randomNumber(0.0, 1.0) <= L(x);
+	return randomDouble(0.0, 1.0) <= L(x);
 }
 
 double fitness(bool x[])
