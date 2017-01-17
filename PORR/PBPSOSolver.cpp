@@ -9,9 +9,10 @@ void PBPSOSolver::loadData(KnapsackProblem problem)
 	weights = problem.constraints[0];
 }
 
-void PBPSOSolver::solve()
+void PBPSOSolver::solve(Mode mode)
 {
 	// Struktury danych
+
 	vector<vector<double>> x(pop_size, vector<double>(D, 0)); // pozycja
 	vector<vector<double>> v(pop_size, vector<double>(D, 0)); // prêdkoœæ
 	vector<vector<bool>> px(pop_size, vector<bool>(D, 0)); // wektory binarne
@@ -21,29 +22,65 @@ void PBPSOSolver::solve()
 	int best_fpx_global = 0; // najlepszy wynik globalny
 
 	// Algorytm
+	
 	int fpx = 0;
-	for (int k = 0; k < iterations; k++) {
-		for (int i = 0; i < pop_size; i++) {
 
-			for (int j = 0; j < D; j++)
-			{
-				v[i][j] = velocity(v[i][j], x[i][j], best_px_local[i][j], best_px_global[j]);
-				x[i][j] = x[i][j] + v[i][j];
-				px[i][j] = toBinary(x[i][j]);
-			}
+	if (mode == Mode::Sequential) {
 
-			fpx = fitness(px[i]);
+		for (int k = 0; k < iterations; k++) {
+			for (int i = 0; i < pop_size; i++) {
 
-			if (fpx > best_fpx_local[i]) {
-				best_px_local[i] = px[i];
-				best_fpx_local[i] = fpx;
+				for (int j = 0; j < D; j++)
+				{
+					v[i][j] = velocity(v[i][j], x[i][j], best_px_local[i][j], best_px_global[j]);
+					x[i][j] = x[i][j] + v[i][j];
+					px[i][j] = toBinary(x[i][j]);
+				}
 
-				if (fpx > best_fpx_global) {
-					best_px_global = px[i];
-					best_fpx_global = fpx;
+				fpx = fitness(px[i]);
+
+				if (fpx > best_fpx_local[i]) {
+					best_px_local[i] = px[i];
+					best_fpx_local[i] = fpx;
+
+					if (fpx > best_fpx_global) {
+						best_px_global = px[i];
+						best_fpx_global = fpx;
+					}
 				}
 			}
 		}
+	}
+	else if(mode == Mode::OpenMP) {
+
+		for (int k = 0; k < iterations; k++) {
+			#pragma omp parallel num_threads(pop_size)
+			{
+				#pragma omp for
+				for (int i = 0; i < pop_size; i++) {
+
+					for (int j = 0; j < D; j++)
+					{
+						v[i][j] = velocity(v[i][j], x[i][j], best_px_local[i][j], best_px_global[j]);
+						x[i][j] = x[i][j] + v[i][j];
+						px[i][j] = toBinary(x[i][j]);
+					}
+
+					fpx = fitness(px[i]);
+
+					if (fpx > best_fpx_local[i]) {
+						best_px_local[i] = px[i];
+						best_fpx_local[i] = fpx;
+
+						if (fpx > best_fpx_global) {
+							best_px_global = px[i];
+							best_fpx_global = fpx;
+						}
+					}
+				}
+			}
+		}
+
 	}
 
 	totalProfit = best_fpx_global;

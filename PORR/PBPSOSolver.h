@@ -5,16 +5,21 @@
 
 using namespace std;
 
+enum Mode {
+	Sequential = 1,
+	OpenMP = 2
+};
+
 class PBPSOSolver
 {
 	// Parametry algorytmu
-	int pop_size = 30;
-	int iterations = 100;
-	int R_min = -1;
-	int R_max = 1;
-	double omega = 0.8;
-	double c1 = 2.0;
-	double c2 = 2.0;
+	const int pop_size = 30;
+	const int iterations = 100;
+	const int R_min = -1;
+	const int R_max = 1;
+	const double omega = 0.8;
+	const double c1 = 2.0;
+	const double c2 = 2.0;
 
 	// Dane wejœciowe
 	int D = 0;
@@ -33,6 +38,6 @@ class PBPSOSolver
 public:
 
 	void loadData(KnapsackProblem);
-	void solve();
+	void solve(Mode);
 	int getTotalProfit();
 };

@@ -10,6 +10,7 @@
 #include <ctime>
 #include <iostream>
 #include <vector>
+#include <omp.h>
 
 
 
