@@ -2,7 +2,7 @@
 
 using namespace std;
 
-struct FileInfo
+struct KnapsackProblem
 {
 	int knapsacksCount;
 	int objectsCount;

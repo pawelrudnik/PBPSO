@@ -2,7 +2,7 @@
 
 #include <fstream>
 #include <sstream>
-#include "FileInfo.h"
+#include "KnapsackProblem.h"
 
 using namespace std;
 
@@ -14,5 +14,5 @@ class FileLoader
 	static void skipLine(fstream &f);
 
 public:
-	static FileInfo load(string fileName);
+	static KnapsackProblem load(string fileName);
 };

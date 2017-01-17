@@ -2,7 +2,7 @@
 #include "FileLoader.h"
 
 
-FileInfo FileLoader::load(string fileName)
+KnapsackProblem FileLoader::load(string fileName)
 {
 	fstream file;
 
@@ -11,7 +11,7 @@ FileInfo FileLoader::load(string fileName)
 		throw std::runtime_error("Couldn't open file " + fileName + " for reading");
 	}
 
-	FileInfo fileInfo;
+	KnapsackProblem fileInfo;
 	fileInfo.knapsacksCount = nextInt(file);
 	fileInfo.objectsCount = nextInt(file);
 	nextInts(file, fileInfo.objectsValues, fileInfo.objectsCount);
