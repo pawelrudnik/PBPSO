@@ -1,1 +1,1 @@
-Implementacja algorytmu PBPSO do rozwi¹zywania problemu plecakowego.
+Implementacja algorytmu PBPSO do rozwiÄ…zywania problemu plecakowego.
