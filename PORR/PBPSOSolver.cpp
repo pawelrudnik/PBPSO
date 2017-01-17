@@ -5,6 +5,7 @@ void PBPSOSolver::loadData(KnapsackProblem problem)
 {
 	D = problem.objectsCount;
 	M = problem.knapsacksCapacities[0];
+	optimum = problem.optimum;
 	profits = problem.objectsValues;
 	weights = problem.constraints[0];
 }
@@ -24,10 +25,11 @@ void PBPSOSolver::solve(Mode mode)
 	// Algorytm
 	
 	int fpx = 0;
+	int k = 0;
 
 	if (mode == Mode::Sequential) {
 
-		for (int k = 0; k < iterations; k++) {
+		for (k = 0; k < iterations; k++) {
 			for (int i = 0; i < pop_size; i++) {
 
 				for (int j = 0; j < D; j++)
@@ -49,11 +51,13 @@ void PBPSOSolver::solve(Mode mode)
 					}
 				}
 			}
+
+			if (best_fpx_global == optimum) break;
 		}
 	}
 	else if(mode == Mode::OpenMP) {
 
-		for (int k = 0; k < iterations; k++) {
+		for (k = 0; k < iterations; k++) {
 			#pragma omp parallel num_threads(pop_size)
 			{
 				#pragma omp for
@@ -79,16 +83,23 @@ void PBPSOSolver::solve(Mode mode)
 					}
 				}
 			}
-		}
 
+			if (best_fpx_global == optimum) break;
+		}
 	}
 
 	totalProfit = best_fpx_global;
+	iterationsNumber = k;
 }
 
 int PBPSOSolver::getTotalProfit()
 {
 	return totalProfit;
+}
+
+int PBPSOSolver::getIterationsNumber()
+{
+	return iterationsNumber;
 }
 
 double PBPSOSolver::velocity(double v_k, double x, double p_local, double p_global) {

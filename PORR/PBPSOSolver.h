@@ -24,11 +24,13 @@ class PBPSOSolver
 	// Dane wejœciowe
 	int D = 0;
 	int M = 0;
+	int optimum = 0;
 	vector<int> profits;
 	vector<int> weights;
 
 	// Dane wynikowe
 	int totalProfit;
+	int iterationsNumber;
 
 	double velocity(double v_k, double x, double p_local, double p_global);
 	double L(double x);
@@ -40,4 +42,5 @@ public:
 	void loadData(KnapsackProblem);
 	void solve(Mode);
 	int getTotalProfit();
+	int getIterationsNumber();
 };

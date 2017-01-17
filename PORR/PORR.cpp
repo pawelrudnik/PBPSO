@@ -39,6 +39,7 @@ int main(int argc, char* argv[])
 	cout << "Solving completed." << endl;
 	cout.precision(10);
 	cout << "Time elapsed: " << sw.elapsed() << endl;
+	cout << "Number of iterations: " << solver.getIterationsNumber() << endl;
 	cout << "Total profit: " << solver.getTotalProfit() << endl;
 
 	return 0;
