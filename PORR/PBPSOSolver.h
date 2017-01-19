@@ -15,8 +15,9 @@ class PBPSOSolver
 	// Parametry algorytmu
 	const int pop_size = 30;
 	const int iterations = 100;
-	const int R_min = -1;
-	const int R_max = 1;
+	const int maxTimesNotChanged = 10;
+	const int R_min = -10;
+	const int R_max = 10;
 	const double omega = 0.8;
 	const double c1 = 2.0;
 	const double c2 = 2.0;
@@ -24,7 +25,6 @@ class PBPSOSolver
 	// Dane wejœciowe
 	int D = 0;
 	int M = 0;
-	int optimum = 0;
 	vector<int> profits;
 	vector<int> weights;
 

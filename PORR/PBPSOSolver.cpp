@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "PBPSOSolver.h"
 
+#define MAX_TIMES_WITHOUT_CHANGE 1
+
 void PBPSOSolver::loadData(KnapsackProblem problem)
 {
 	D = problem.objectsCount;
 	M = problem.knapsacksCapacities[0];
-	optimum = problem.optimum;
 	profits = problem.objectsValues;
 	weights = problem.constraints[0];
 }
@@ -26,10 +27,13 @@ void PBPSOSolver::solve(Mode mode)
 	
 	int fpx = 0;
 	int k = 0;
+	int globalOptimum = 0;
+	int timesWithoutChange = 0;
 
 	if (mode == Mode::Sequential) {
 
 		for (k = 0; k < iterations; k++) {
+
 			for (int i = 0; i < pop_size; i++) {
 
 				for (int j = 0; j < D; j++)
@@ -48,16 +52,26 @@ void PBPSOSolver::solve(Mode mode)
 					if (fpx > best_fpx_global) {
 						best_px_global = px[i];
 						best_fpx_global = fpx;
-					}
+					} 
 				}
 			}
 
-			if (best_fpx_global == optimum) break;
+			if (best_fpx_global > globalOptimum) {
+				globalOptimum = best_fpx_global;
+				timesWithoutChange = 0;
+			}
+			else {
+				timesWithoutChange++;
+			}
+
+			if (timesWithoutChange > maxTimesNotChanged) break;
 		}
+
 	}
 	else if(mode == Mode::OpenMP) {
 
 		for (k = 0; k < iterations; k++) {
+
 			#pragma omp parallel num_threads(pop_size)
 			{
 				#pragma omp for
@@ -84,11 +98,20 @@ void PBPSOSolver::solve(Mode mode)
 				}
 			}
 
-			if (best_fpx_global == optimum) break;
+			if (best_fpx_global > globalOptimum) {
+				globalOptimum = best_fpx_global;
+				timesWithoutChange = 0;
+			}
+			else {
+				timesWithoutChange++;
+			}
+
+			if (timesWithoutChange > maxTimesNotChanged) break;
 		}
+
 	}
 
-	totalProfit = best_fpx_global;
+	totalProfit = globalOptimum;
 	iterationsNumber = k;
 }
 

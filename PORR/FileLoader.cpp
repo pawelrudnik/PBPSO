@@ -22,7 +22,7 @@ KnapsackProblem FileLoader::load(string fileName)
 		fileInfo.constraints.push_back(constraints);
 	}
 
-	fileInfo.optimum = nextInt(file);
+	nextInt(file);
 	fileInfo.nameOfTheGame = nextToken(file);
 
 	return fileInfo;
